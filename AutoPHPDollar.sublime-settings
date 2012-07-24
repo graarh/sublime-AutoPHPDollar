@@ -1,0 +1,56 @@
+{
+    //additional search-replace rules
+    "rules": [
+        //variable has been followed by "=", correct it
+        {
+            "search":  "(?<![\\$\\w\\d\\>])(\\w[\\w\\d]*)(?=\\s*=)",
+            "replace": "$\\1"
+        },
+
+        //foreach as value, correct value
+        {
+            "search":  "(foreach.+?as\\s+)(?<![\\$\\w\\d\\>])(\\w[\\w\\d]*)(?=[^\\w^\\d])",
+            "replace": "\\1$\\2"
+        },
+        //foreach as key=>value, correct value
+        {
+            "search":  "(foreach.+?as\\s+)(\\$\\w[\\w\\d]*\\s*=>\\s*)(?<![\\$\\w\\d])(\\w[\\w\\d]*)(?=[^\\w^\\d])",
+            "replace": "\\1\\2$\\3"
+        }
+    ],
+    //ignore variable-like text, if it is preceding by this words
+    "ignore after": [
+        "class",
+        "function",
+        "const"
+    ],
+    //ignore this names if has been used as variable name
+    "ignore names": [
+        "private",
+        "public",
+        "protected",
+        "function",
+        "class",
+        "self",
+        "static",
+        "return",
+        "if",
+        "else",
+        "while",
+        "for",
+        "foreach",
+        "switch",
+        "case",
+        "try",
+        "catch",
+        "const",
+        "throw",
+        "use",
+        "true",
+        "false",
+        "null",
+        "default",
+        "break",
+        "continue"
+    ]
+}
