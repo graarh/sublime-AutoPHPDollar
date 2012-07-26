@@ -32,7 +32,7 @@ ignore_after = settings.get("ignore after", [])
 
 
 def get_patterns(view):
-    return [
+    return rules + [
         #already known variables
         #quick hack: ignore variables adjaced to ", my personal preferense
         {
@@ -46,7 +46,7 @@ def get_patterns(view):
             "search":  variables_set_to_regex(ignore_after) + r"(\s+)\$",
             "replace": r"\1\2"
         }
-    ] + rules
+    ]
 
 
 def in_list(region, list):
