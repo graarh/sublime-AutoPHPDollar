@@ -3,7 +3,7 @@
     "rules": [
         //variable has been followed by "=", correct it
         {
-            "search":  "(?<![\\$\\w\\d\\>])(\\w[\\w\\d]*)(?=\\s*=)",
+            "search":  "(?<![\\$\\w\\d\\>])(\\w[\\w\\d]*\\s*=[^>])",
             "replace": "$\\1"
         },
 
