@@ -100,8 +100,7 @@ def apply_patterns(text, patterns):
 class CphpListener(sublime_plugin.EventListener):
     def on_modified(self, view):
         if syntax_name(view) == "PHP":
-
-            #avoid heavy calculations for "hold delete/backspace and wait"
+            # avoid heavy calculations for "hold delete/backspace and wait"
             action = view.command_history(0, True)[0]
             if action == "left_delete" or action == "right_delete":
                 return
@@ -117,7 +116,7 @@ class CphpListener(sublime_plugin.EventListener):
             php_regions = view.find_all(r"<\?.+?\?>")
 
             #get list of commented regions
-            comments = view.find_all(r"#.+|//.+|/\*[\w\W]+?\*/")
+            comments = view.find_all(r"(#|//).+|/\*[\w\W]+?\*/")
 
             #strings should be modified in the reversed order
             #to keep upper regions positions correct
