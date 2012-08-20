@@ -30,7 +30,6 @@ ignore_names = settings.get("ignore names", [])
 rules = settings.get("rules", [])
 ignore_after = settings.get("ignore after", [])
 
-
 def get_patterns(view):
     return rules + [
         #already known variables
@@ -101,6 +100,7 @@ def apply_patterns(text, patterns):
 class CphpListener(sublime_plugin.EventListener):
     def on_modified(self, view):
         if syntax_name(view) == "PHP":
+
             #avoid heavy calculations for "hold delete/backspace and wait"
             action = view.command_history(0, True)[0]
             if action == "left_delete" or action == "right_delete":
@@ -116,11 +116,17 @@ class CphpListener(sublime_plugin.EventListener):
             #get list of <? .. ?> segments
             php_regions = view.find_all(r"<\?.+?\?>")
 
+            #get list of commented regions
+            comments = view.find_all(r"#.+|//.+|/\*[\w\W]+?\*/")
+
             #strings should be modified in the reversed order
             #to keep upper regions positions correct
             edit = None
             selection = view.sel()
             for i in range(len(selection) - 1, -1, -1):
+                #do not make changes inside comments
+                if in_list(selection[i], comments):
+                    continue
                 #do not make any changes outside <? ... ?> segments
                 if not in_list(selection[i], php_regions):
                     continue

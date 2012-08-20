@@ -67,5 +67,4 @@ You can not use constructions like function $myfuncname($args) in PHP, so you do
 ```
 
 ### Roadmap and TODO:
-- avoid of adding "$" inside comments and text blocks
 - improve variables detection
