@@ -113,7 +113,7 @@ class CphpListener(sublime_plugin.EventListener):
             patterns = get_patterns(view)
 
             #get list of <? .. ?> segments
-            php_regions = view.find_all(r"<\?.+?\?>")
+            php_regions = view.find_all(r"<\?[\w\W]+?(\?>|\z)")
 
             #get list of commented regions
             comments = view.find_all(r"(#|//).+|/\*[\w\W]+?\*/")
