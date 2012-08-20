@@ -125,7 +125,7 @@ class CphpListener(sublime_plugin.EventListener):
             selection = view.sel()
             for i in range(len(selection) - 1, -1, -1):
                 #do not make changes inside comments
-                if in_list(selection[i], comments):
+                if len(comments) and in_list(selection[i], comments):
                     continue
                 #do not make any changes outside <? ... ?> segments
                 if not in_list(selection[i], php_regions):
