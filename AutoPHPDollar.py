@@ -22,7 +22,6 @@ import re
 
 import sublime
 import sublime_plugin
-from sets import Set
 
 
 settings = sublime.load_settings('AutoPHPDollar.sublime-settings')
@@ -59,7 +58,7 @@ def in_list(region, list):
 
 def find_variables(view):
     #find all php variables in current view
-    variables = Set()
+    variables = set()
     regions = view.find_all("\$\w[\w\d]*")
 
     for region in regions:
@@ -96,9 +95,17 @@ def apply_patterns(text, patterns):
         )
     return text
 
+class CphpCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit, corrected, text, a, b):
+        view = self.view
+        to_cursor = sublime.Region(a, b)
+        view.replace(edit, to_cursor, corrected)
+
 
 class CphpListener(sublime_plugin.EventListener):
     def on_modified(self, view):
+
         if syntax_name(view) == "PHP":
             # avoid heavy calculations for "hold delete/backspace and wait"
             action = view.command_history(0, True)[0]
@@ -112,6 +119,7 @@ class CphpListener(sublime_plugin.EventListener):
             #worst way, first point to optimize
             patterns = get_patterns(view)
 
+
             #get list of <? .. ?> segments
             php_regions = view.find_all(r"<\?[\w\W]+?(\?>|\z)")
 
@@ -120,7 +128,6 @@ class CphpListener(sublime_plugin.EventListener):
 
             #strings should be modified in the reversed order
             #to keep upper regions positions correct
-            edit = None
             selection = view.sel()
             for i in range(len(selection) - 1, -1, -1):
                 #do not make changes inside comments
@@ -137,9 +144,5 @@ class CphpListener(sublime_plugin.EventListener):
                 corrected = apply_patterns(text, patterns)
 
                 if corrected != text:
-                    if edit == None:
-                        edit = view.begin_edit("cphp")
-                    view.replace(edit, to_cursor, corrected)
+                    view.run_command("cphp", {"corrected": corrected, "text": text, "a": line.a, "b": selection[i].b});
 
-            if edit != None:
-                view.end_edit(edit)
