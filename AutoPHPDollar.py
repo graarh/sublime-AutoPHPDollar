@@ -34,7 +34,7 @@ def get_patterns(view):
         #already known variables
         #quick hack: ignore variables adjaced to ", my personal preferense
         {
-            "search":  r"(?<![\$\w\d\>\"])"
+            "search":  r"(?<![\$\w\d\>\"\'])"
                 + variables_set_to_regex(find_variables(view))
                 + "(?=[^\w^\d])",
             "replace": r"$\1"
